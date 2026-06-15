@@ -7,6 +7,9 @@
 # -------------------------------------------------------------------------------
 import ctypes
 import json
+import os
+import sys
+import winreg
 
 import psutil
 import pymem
@@ -119,7 +122,8 @@ def read_info(version_list, is_logging=False):
     result = []
     error = ""
     for process in psutil.process_iter(['name', 'exe', 'pid', 'cmdline']):
-        if process.name() == 'WeChat.exe':
+        pname = process.name() if process.name() else ""
+        if pname in ('WeChat.exe', 'Weixin.exe', 'WeChat.exe', 'weixin.exe'):
             wechat_process.append(process)
 
     if len(wechat_process) == 0:
@@ -180,10 +184,6 @@ def read_info(version_list, is_logging=False):
         print("=" * 32)
 
     return result
-
-
-import os
-import sys
 
 
 def resource_path(relative_path):

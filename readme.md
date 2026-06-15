@@ -1,586 +1,352 @@
-# 💬 fork-WeChatMsg - 微信消息导出工具
+# fork-WeChatMsg 使用说明
 
-![Python](https://img.shields.io/badge/Python-3.8+-blue?logo=python)
-![PyQt](https://img.shields.io/badge/PyQt-5.x-green)
-![License](https://img.shields.io/badge/License-GPL%20v3-blue)
-
-## 📦 项目来源
-
-- **原项目**: [LC044/WeChatMsg](https://github.com/LC044/WeChatMsg)
-- **原作者**: LC044
-- **开源协议**: GNU General Public License v3.0 (GPL-3.0)
-- **Fork时间**: 2024年
-
-## 🔧 二次开发内容
-
-本项目为原项目的学习研究版本,主要用于:
-- 学习微信数据库的解密和数据提取
-- 研究数据可视化和统计分析技术
-- 了解GUI应用的开发方法
-
-## ⚠️ 免责声明
-
-本项目仅供学习研究使用,请勿用于非法用途。使用本项目所产生的一切后果由使用者自行承担。
-
-## 📖 项目简介
-
-fork-WeChatMsg是微信PC端消息记录导出与分析工具,支持导出聊天记录、联系人、图片视频等数据,并提供数据统计和可视化分析功能。
-
-## 🏗️ 系统架构
-
-```mermaid
-graph TB
-    subgraph "数据获取层"
-        WeChatDB[微信数据库]
-        KeyExtract[密钥提取]
-        DBDecrypt[数据库解密]
-    end
-    
-    subgraph "数据处理层"
-        DataParser[数据解析]
-        MsgParser[消息解析]
-        MediaParser[媒体解析]
-        ContactParser[联系人解析]
-    end
-    
-    subgraph "分析统计层"
-        WordCloud[词云生成]
-        ChatAnalysis[聊天分析]
-        UserAnalysis[用户分析]
-        TimeAnalysis[时间分析]
-    end
-    
-    subgraph "导出输出层"
-        HTMLExport[HTML导出]
-        CSVExport[CSV导出]
-        PDFExport[PDF导出]
-        ChartExport[图表导出]
-    end
-    
-    subgraph "界面层"
-        GUIClient[图形界面]
-        CLI[命令行工具]
-    end
-    
-    WeChatDB --> KeyExtract
-    KeyExtract --> DBDecrypt
-    
-    DBDecrypt --> DataParser
-    DataParser --> MsgParser
-    DataParser --> MediaParser
-    DataParser --> ContactParser
-    
-    MsgParser --> WordCloud
-    MsgParser --> ChatAnalysis
-    MsgParser --> UserAnalysis
-    MsgParser --> TimeAnalysis
-    
-    ChatAnalysis --> HTMLExport
-    ChatAnalysis --> CSVExport
-    ChatAnalysis --> PDFExport
-    ChatAnalysis --> ChartExport
-    
-    GUIClient --> DataParser
-    CLI --> DataParser
-```
-
-## ⚠️ 免责声明
-
-**本项目仅供个人学习和研究使用,请勿用于非法用途。使用本项目所产生的一切后果由使用者自行承担。**
-
-## 🚀 快速开始
-
-### 环境要求
-
-- Python 3.8+
-- 微信PC版(最新版本)
-
-### 安装步骤
-
-```bash
-# 1. 克隆项目
-git clone https://github.com/yourusername/fork-WeChatMsg.git
-
-# 2. 安装依赖
-pip install -r requirements.txt
-
-# 3. 运行图形界面
-python main.py
-
-# 4. 运行命令行工具
-python main_cli.py --help
-```
-
-## 🛠️ 技术栈
-
-| 技术 | 版本 | 说明 |
-|------|------|------|
-| Python | 3.8+ | 编程语言 |
-| PyQt5 | 5.x | GUI框架 |
-| SQLite | - | 数据库 |
-|jieba| - | 中文分词 |
-| WordCloud | - | 词云生成 |
-| Matplotlib | - | 数据可视化 |
-| Pandas | - | 数据分析 |
-
-## 📁 项目结构
-
-```
-fork-WeChatMsg/
-├── app/
-│   ├── ui/                    # 图形界面
-│   │   ├── main_window.py
-│   │   ├── chat_window.py
-│   │   └── analysis_window.py
-│   ├── analysis/              # 数据分析
-│   │   ├── wordcloud.py      # 词云分析
-│   │   ├── chat_analysis.py  # 聊天分析
-│   │   └── user_analysis.py  # 用户分析
-│   ├── export/                # 数据导出
-│   │   ├── html_export.py
-│   │   ├── csv_export.py
-│   │   └── pdf_export.py
-│   ├── decrypt/               # 数据解密
-│   │   ├── get_key.py        # 获取密钥
-│   │   └── decrypt_db.py     # 解密数据库
-│   └── util/                  # 工具函数
-│       ├── database.py
-│       └── parser.py
-├── resource/                  # 资源文件
-├── tests/                     # 测试代码
-├── main.py                    # 图形界面入口
-├── main_cli.py                # 命令行入口
-└── requirements.txt           # 依赖配置
-```
-
-## 💡 核心示例
-
-### 数据库解密
-
-```python
-import hashlib
-
-class WeChatDecryptor:
-    """微信数据库解密器"""
-    
-    def __init__(self):
-        self.key = None
-    
-    def get_wechat_key(self):
-        """获取微信数据库密钥"""
-        # 从微信进程内存中提取密钥
-        # 具体实现涉及内存读取和解析
-        pass
-    
-    def decrypt_database(self, db_path: str, output_path: str):
-        """解密微信数据库"""
-        # 使用获取的密钥解密数据库
-        import pysqlcipher3.dbapi2 as sqlite
-        
-        conn = sqlite.connect(db_path)
-        cursor = conn.cursor()
-        
-        # 设置密钥
-        cursor.execute(f"PRAGMA key = 'x\'{self.key}\''")
-        
-        # 导出解密后的数据库
-        cursor.execute("ATTACH DATABASE '{}' AS plaintext KEY ''".format(output_path))
-        cursor.execute("SELECT sqlcipher_export('plaintext')")
-        
-        conn.close()
-```
-
-### 消息解析
-
-```python
-from dataclasses import dataclass
-from datetime import datetime
-from typing import List, Optional
-
-@dataclass
-class WeChatMessage:
-    """微信消息数据结构"""
-    msg_id: int
-    talker: str                    # 聊天对象
-    sender: str                    # 发送者
-    content: str                   # 消息内容
-    msg_type: int                  # 消息类型
-    create_time: datetime          # 创建时间
-    media_path: Optional[str]      # 媒体路径
-    
-class MessageParser:
-    """消息解析器"""
-    
-    def __init__(self, db_path: str):
-        self.db_path = db_path
-    
-    def parse_messages(self, talker: str) -> List[WeChatMessage]:
-        """解析指定聊天对象的所有消息"""
-        import sqlite3
-        
-        conn = sqlite3.connect(self.db_path)
-        cursor = conn.cursor()
-        
-        # 查询消息记录
-        cursor.execute(
-            """SELECT msgId, talker, sender, content, type, createTime, mediaPath
-               FROM MSG WHERE talker = ?
-               ORDER BY createTime ASC""",
-            (talker,)
-        )
-        
-        messages = []
-        for row in cursor.fetchall():
-            message = WeChatMessage(
-                msg_id=row[0],
-                talker=row[1],
-                sender=row[2],
-                content=row[3],
-                msg_type=row[4],
-                create_time=datetime.fromtimestamp(row[5]),
-                media_path=row[6]
-            )
-            messages.append(message)
-        
-        conn.close()
-        return messages
-    
-    def parse_contacts(self) -> List[dict]:
-        """解析联系人列表"""
-        import sqlite3
-        
-        conn = sqlite3.connect(self.db_path)
-        cursor = conn.cursor()
-        
-        cursor.execute("SELECT * FROM Contact")
-        
-        contacts = []
-        for row in cursor.fetchall():
-            contact = {
-                'username': row[0],
-                'alias': row[1],
-                'nickname': row[2],
-                'remark': row[3]
-            }
-            contacts.append(contact)
-        
-        conn.close()
-        return contacts
-```
-
-### 数据分析
-
-```python
-from wordcloud import WordCloud
-import jieba
-from collections import Counter
-
-class ChatAnalyzer:
-    """聊天数据分析器"""
-    
-    def __init__(self, messages: List[WeChatMessage]):
-        self.messages = messages
-    
-    def generate_wordcloud(self, output_path: str):
-        """生成词云"""
-        # 合并所有消息内容
-        text = ' '.join([msg.content for msg in self.messages])
-        
-        # 中文分词
-        words = jieba.cut(text)
-        word_list = ' '.join(words)
-        
-        # 生成词云
-        wordcloud = WordCloud(
-            font_path='simhei.ttf',
-            width=800,
-            height=600,
-            background_color='white'
-        ).generate(word_list)
-        
-        # 保存词云图片
-        wordcloud.to_file(output_path)
-    
-    def analyze_by_time(self) -> dict:
-        """按时间分析聊天频率"""
-        time_stats = {}
-        
-        for msg in self.messages:
-            hour = msg.create_time.hour
-            time_stats[hour] = time_stats.get(hour, 0) + 1
-        
-        return time_stats
-    
-    def analyze_by_user(self) -> dict:
-        """按用户分析消息数量"""
-        user_stats = {}
-        
-        for msg in self.messages:
-            user_stats[msg.sender] = user_stats.get(msg.sender, 0) + 1
-        
-        return user_stats
-    
-    def get_most_common_words(self, top_n: int = 20) -> List[tuple]:
-        """获取最常用的词汇"""
-        # 合并所有消息内容
-        text = ' '.join([msg.content for msg in self.messages])
-        
-        # 中文分词
-        words = jieba.cut(text)
-        
-        # 过滤停用词
-        with open('stopwords.txt', 'r', encoding='utf-8') as f:
-            stopwords = set(f.read().splitlines())
-        
-        filtered_words = [word for word in words 
-                         if word not in stopwords and len(word) > 1]
-        
-        # 统计词频
-        word_counts = Counter(filtered_words)
-        
-        return word_counts.most_common(top_n)
-```
-
-### 数据导出
-
-```python
-import pandas as pd
-from datetime import datetime
-
-class DataExporter:
-    """数据导出器"""
-    
-    def export_to_html(self, messages: List[WeChatMessage], output_path: str):
-        """导出为HTML格式"""
-        html_template = """
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <meta charset="UTF-8">
-            <title>微信聊天记录</title>
-            <style>
-                .message {{
-                    margin: 10px 0;
-                    padding: 10px;
-                    border-radius: 5px;
-                }}
-                .sent {{
-                    background-color: #95EC69;
-                    text-align: right;
-                }}
-                .received {{
-                    background-color: #FFFFFF;
-                    text-align: left;
-                }}
-            </style>
-        </head>
-        <body>
-            <h1>微信聊天记录导出</h1>
-            <div class="chat-container">
-                {messages}
-            </div>
-        </body>
-        </html>
-        """
-        
-        messages_html = ""
-        for msg in messages:
-            msg_class = "sent" if msg.sender == "self" else "received"
-            messages_html += f"""
-                <div class="message {msg_class}">
-                    <div class="time">{msg.create_time.strftime('%Y-%m-%d %H:%M:%S')}</div>
-                    <div class="content">{msg.content}</div>
-                </div>
-            """
-        
-        html_content = html_template.format(messages=messages_html)
-        
-        with open(output_path, 'w', encoding='utf-8') as f:
-            f.write(html_content)
-    
-    def export_to_csv(self, messages: List[WeChatMessage], output_path: str):
-        """导出为CSV格式"""
-        data = []
-        
-        for msg in messages:
-            data.append({
-                '消息ID': msg.msg_id,
-                '聊天对象': msg.talker,
-                '发送者': msg.sender,
-                '消息内容': msg.content,
-                '消息类型': msg.msg_type,
-                '创建时间': msg.create_time.strftime('%Y-%m-%d %H:%M:%S'),
-                '媒体路径': msg.media_path
-            })
-        
-        df = pd.DataFrame(data)
-        df.to_csv(output_path, index=False, encoding='utf-8-sig')
-    
-    def export_to_pdf(self, messages: List[WeChatMessage], output_path: str):
-        """导出为PDF格式"""
-        from reportlab.lib.pagesizes import A4
-        from reportlab.pdfgen import canvas
-        from reportlab.pdfbase import pdfmetrics
-        from reportlab.pdfbase.ttfonts import TTFont
-        
-        # 注册中文字体
-        pdfmetrics.registerFont(TTFont('SimHei', 'simhei.ttf'))
-        
-        c = canvas.Canvas(output_path, pagesize=A4)
-        c.setFont('SimHei', 12)
-        
-        y_position = 750
-        
-        for msg in messages:
-            # 检查是否需要换页
-            if y_position < 50:
-                c.showPage()
-                c.setFont('SimHei', 12)
-                y_position = 750
-            
-            # 绘制消息
-            text = f"{msg.create_time.strftime('%Y-%m-%d %H:%M:%S')} - {msg.sender}: {msg.content}"
-            c.drawString(50, y_position, text[:50])  # 限制每行长度
-            
-            y_position -= 20
-        
-        c.save()
-```
-
-### 图形界面
-
-```python
-from PyQt5.QtWidgets import QMainWindow, QApplication
-from PyQt5.QtCore import Qt
-
-class MainWindow(QMainWindow):
-    """主窗口"""
-    
-    def __init__(self):
-        super().__init__()
-        
-        self.setWindowTitle("微信消息导出工具")
-        self.setGeometry(100, 100, 800, 600)
-        
-        # 初始化界面
-        self.init_ui()
-    
-    def init_ui(self):
-        """初始化界面组件"""
-        # 创建菜单栏
-        menubar = self.menuBar()
-        
-        # 文件菜单
-        file_menu = menubar.addMenu('文件')
-        
-        import_action = QAction('导入数据库', self)
-        import_action.triggered.connect(self.import_database)
-        file_menu.addAction(import_action)
-        
-        export_action = QAction('导出数据', self)
-        export_action.triggered.connect(self.export_data)
-        file_menu.addAction(export_action)
-        
-        # 创建工具栏
-        toolbar = self.addToolBar('工具')
-        
-        # 添加按钮
-        decrypt_btn = QPushButton('解密数据库')
-        decrypt_btn.clicked.connect(self.decrypt_database)
-        toolbar.addWidget(decrypt_btn)
-        
-        analyze_btn = QPushButton('数据分析')
-        analyze_btn.clicked.connect(self.analyze_data)
-        toolbar.addWidget(analyze_btn)
-    
-    def import_database(self):
-        """导入数据库"""
-        file_path, _ = QFileDialog.getOpenFileName(
-            self, '选择数据库文件', '', 'Database Files (*.db)'
-        )
-        
-        if file_path:
-            # 处理数据库导入
-            pass
-    
-    def export_data(self):
-        """导出数据"""
-        file_path, _ = QFileDialog.getSaveFileName(
-            self, '保存文件', '', 'HTML Files (*.html);;CSV Files (*.csv)'
-        )
-        
-        if file_path:
-            # 处理数据导出
-            pass
-    
-    def decrypt_database(self):
-        """解密数据库"""
-        # 调用解密模块
-        pass
-    
-    def analyze_data(self):
-        """数据分析"""
-        # 调用分析模块
-        pass
-
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    window = MainWindow()
-    window.show()
-    sys.exit(app.exec_())
-```
-
-## 📊 功能截图
-
-### 主界面
-
-![主界面](./screenshots/main_window.png)
-
-### 聊天记录
-
-![聊天记录](./screenshots/chat_history.png)
-
-### 数据分析
-
-![数据分析](./screenshots/analysis.png)
-
-## 🎯 核心特性
-
-- **数据解密**: 自动获取密钥并解密微信数据库
-- **多格式导出**: 支持HTML/CSV/PDF等多种格式
-- **数据分析**: 词云、聊天频率、用户分析等
-- **图形界面**: 友好的PyQt5图形界面
-- **命令行**: 支持命令行批量操作
-- **媒体导出**: 支持图片、视频、语音导出
-
-## 📝 更新日志
-
-### v1.0.0 (2024-01-01)
-- ✨ 初始版本发布
-- ✨ 完成数据库解密功能
-- ✨ 完成消息解析功能
-- ✨ 完成数据导出功能
-- ✨ 完成数据分析功能
-- ✨ 完成图形界面
-
-## 👥 贡献指南
-
-欢迎贡献代码!请遵循以下步骤:
-
-1. Fork本仓库
-2. 创建特性分支 (`git checkout -b feature/AmazingFeature`)
-3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
-4. 推送到分支 (`git push origin feature/AmazingFeature`)
-5. 提交Pull Request
-
-## 📄 许可证
-
-本项目采用 MIT 许可证 - 查看 [LICENSE](LICENSE) 文件了解详情
-
-## 📮 联系方式
-
-项目维护者: JOSP Team
+> 本项目仅供个人学习研究使用，请勿用于非法用途。
 
 ---
 
-⭐ 如果这个项目对你有帮助,欢迎Star支持!
+## 1. 项目简介
+
+fork-WeChatMsg 是一个**微信 PC 端聊天记录导出与分析工具**，它可以：
+
+- 从微信进程内存中读取数据库解密密钥
+- 解密微信本地 SQLite 加密数据库（MSG.db、MicroMsg.db 等）
+- 在图形界面中浏览联系人与聊天记录
+- 生成聊天记录报告、词云、年度总结、情感分析等可视化内容
+- 将聊天记录导出为 HTML / Word / CSV 等格式
+
+本项目有两个 GUI 入口：
+
+| 入口 | 功能 |
+|---|---|
+| `python main.py` | 主程序：解密 + 聊天/联系人/分析/导出完整界面 |
+| `python decrypt_window.py` | 独立解密工具：只负责解密数据库 |
+
+---
+
+## 2. 环境要求
+
+| 项目 | 要求 |
+|---|---|
+| 操作系统 | Windows 10 / 11（必须 Windows，Linux/mac 不可用） |
+| Python | 3.8 ～ 3.12 均可；推荐 **3.10 / 3.11**（PyQt5 在 3.13+ 下需要新版 wheel） |
+| 微信 PC 端 | **3.2.1 ~ 3.9.8.15**（见第 3 节版本限制） |
+| 权限 | 普通用户即可；不需要管理员 |
+
+> Python 3.13 也可运行，但必须使用本仓库当前修改过的 `requirements.txt`（使用 `numpy>=1.26`、`pandas>=2.0` 等兼容 3.13 的版本）。
+
+---
+
+## 3. 微信版本限制 ⚠️（重要）
+
+### 3.1 支持的微信 PC 版本
+
+工具通过**读取 `WeChatWin.dll` 中的固定内存偏移量**来获取密钥。微信每次更新后偏移量都会变化，因此只支持以下版本：
+
+```
+3.2.1.154
+3.3.0.84   3.3.0.93   3.3.0.115
+3.3.5.34   3.3.5.42   3.3.5.46
+3.4.0.37   3.4.0.38   3.4.0.50   3.4.0.54
+3.4.5.27   3.4.5.45
+3.5.0.20   3.5.0.29   3.5.0.33   3.5.0.39   3.5.0.42   3.5.0.44   3.5.0.46
+3.6.0.18
+3.6.5.7    3.6.5.16
+3.7.0.26   3.7.0.29   3.7.0.30
+3.7.5.11   3.7.5.23   3.7.5.27   3.7.5.31
+3.7.6.24   3.7.6.29   3.7.6.44
+3.8.0.31   3.8.0.33   3.8.0.41
+3.8.1.26
+3.9.0.28
+3.9.2.23   3.9.2.26
+3.9.5.81   3.9.5.91
+3.9.6.19   3.9.6.33
+3.9.7.15   3.9.7.25   3.9.7.29
+3.9.8.15  ← 推荐版本（最新支持）
+```
+
+### 3.2 不支持的版本
+
+- **微信 4.0.x / 4.1.x 及以上的新版**：对数据库加密方式与 `WeChatWin.dll` 内存布局做了改动，原项目维护的偏移量列表中**没有对应记录**。
+- 微信 3.1 及以下：太旧，不在列表中。
+- 微信 UWP / 应用商店版本 / 小程序版 `WeChatAppEx.exe`：非主程序，不识别。
+
+如果你当前的微信是 4.1.x，运行解密会得到如下错误：
+
+```
+[-] WeChat Current Version 4.1.10.29 Is Not Supported
+```
+
+### 3.3 如何降级到支持的版本
+
+1. 先通过控制面板卸载当前微信（**聊天记录不会被删除**，只卸载程序）。
+2. 搜索下载 `微信 PC 版 3.9.8.15` 安装包（官方历史版本或可信的第三方下载站）。
+3. 安装后登录微信，让它把消息同步到本地。
+4. 退出微信后再执行解密工具（确保 `WeChat.exe` 或 `Weixin.exe` 进程存在即可）。
+
+### 3.4 自行添加偏移量（进阶）
+
+如果你有逆向基础，可以用 x64dbg / Cheat Engine 在 `WeChatWin.dll` 中定位：
+
+- `name` 偏移（账号昵称）
+- `account` 偏移（账号字符串）
+- `mobile` 偏移（手机号）
+- `mail` 偏移（邮箱）
+- `key` 偏移（数据库密钥指针地址）
+
+然后在以下两个文件中各加一行：
+
+- `app/decrypt/version_list.json`
+- `app/resources/version_list.json`
+
+```json
+"4.1.10.29": [NAME_OFFSET, ACCOUNT_OFFSET, MOBILE_OFFSET, MAIL_OFFSET, KEY_OFFSET]
+```
+
+偏移量必须使用**十进制**整数；`0` 代表该字段在当前版本中无法获取。
+
+---
+
+## 4. 安装步骤
+
+### 4.1 克隆项目
+
+```bash
+git clone https://github.com/yourname/fork-WeChatMsg.git
+cd fork-WeChatMsg
+```
+
+### 4.2 安装 Python 依赖
+
+在项目根目录执行：
+
+```bash
+pip install -r requirements.txt
+```
+
+核心依赖说明：
+
+| 依赖 | 作用 |
+|---|---|
+| `PyQt5` / `PyQtWebEngine` | GUI 与内嵌浏览器 |
+| `pandas` / `numpy` | 数据处理、统计、词频分析 |
+| `jieba` / `snownlp` | 中文分词与情感分析 |
+| `python-docx` / `docxcompose` | Word 文档导出 |
+| `pyecharts` | ECharts 图表（词云、年度报告等） |
+| `psutil` / `pymem` | 读取微信进程、读取内存偏移 |
+| `pycryptodomex` | 数据库解密算法支持 |
+| `pywin32` | Windows API（COM、注册表等） |
+| `Pillow` | 头像/图片处理 |
+| `xmltodict` | XML 解析 |
+| `beautifulsoup4` | HTML 导出辅助 |
+
+### 4.3 验证安装
+
+在项目根目录执行：
+
+```bash
+python -c "import PyQt5, pandas, jieba, psutil, pymem, docx, pyecharts; print('OK')"
+```
+
+输出 `OK` 即环境就绪。
+
+---
+
+## 5. 使用流程
+
+### 5.1 准备工作
+
+1. 登录并启动 **微信 PC 版**（确保进程 `WeChat.exe` 或 `Weixin.exe` 在运行）。
+2. 让微信把消息同步到本地（点击某个会话、等待"加载中…"结束）。
+3. 建议退出微信后再解密（避免数据库文件被占用导致解密失败）。
+
+### 5.2 方法一：独立解密工具（推荐先跑这个）
+
+```bash
+python decrypt_window.py
+```
+
+界面出现后按顺序操作：
+
+1. 点击 **"获取微信信息"** → 若成功，界面会显示 key / wxid / pid / 版本号。
+2. 程序会自动探测本机微信数据目录（以 `wxid_xxx` 结尾的目录），或手动点 **"选择数据目录"**。
+3. 点击 **"开始解密数据库"** → 进度条跑满，解密完成。
+4. 解密后的数据库位于：
+
+   ```
+   app/DataBase/Msg/MSG.db
+   app/DataBase/Msg/MicroMsg.db
+   ...
+   ```
+
+然后运行主程序查看聊天记录：
+
+```bash
+python main.py
+```
+
+### 5.3 方法二：主程序一站式
+
+```bash
+python main.py
+```
+
+- 若数据库已解密：直接进入聊天/联系人界面。
+- 若数据库未解密：先弹出解密窗口，流程与 5.2 相同。
+
+### 5.4 主界面功能
+
+进入主界面后，左侧图标栏依次为：
+
+| 图标 | 功能 |
+|---|---|
+| 💬 聊天 | 查看好友聊天记录，支持搜索、导出 HTML/Word/CSV |
+| 👥 联系人 | 管理好友列表、标签、公众号 |
+| 👤 我的信息 | 当前登录账号信息 |
+| 📊 数据分析 | 生成词云、聊天时段分布、好友活跃度排行 |
+| 🎭 情感分析 | 对聊天内容做情感倾向（正/负面）分析与图表 |
+| 📅 年度报告 | 类似"微信数据报告"的单年度可视化总结 |
+
+---
+
+## 6. 常见问题 FAQ
+
+### Q1. 运行 `python decrypt_window.py` 提示 `[-] WeChat No Run`
+
+**原因**：微信进程名匹配不到。有的安装包进程叫 `Weixin.exe`（例如 `D:\Weixin\Weixin.exe`），但原项目只识别 `WeChat.exe`。
+
+**解决**：本仓库已在 `app/decrypt/get_wx_info.py` 中修复，同时识别 `WeChat.exe` 和 `Weixin.exe`。使用当前版本重跑即可。
+
+### Q2. 运行解密提示 `WeChat Current Version x.x.x.x Is Not Supported`
+
+**原因**：当前微信版本不在偏移量支持列表中。
+
+**解决**：
+- 推荐：降级到 `3.9.8.15`（见第 3.3 节）。
+- 或：自行添加偏移量（见第 3.4 节）。
+
+### Q3. `ModuleNotFoundError: No module named 'pymem' / 'xmltodict' / 'docx'`
+
+**原因**：依赖没装全。
+
+**解决**：
+
+```bash
+pip install -r requirements.txt
+```
+
+单装某一个也可以：
+
+```bash
+pip install pymem xmltodict python-docx
+```
+
+### Q4. `qt.svg: Cannot open file ./app/data/icons/logo.svg`
+
+**原因**：原项目图标路径是 `app/data/icons/`，但仓库实际图标放在 `app/resources/icons/`。
+
+**解决**：本仓库已在以下文件修复路径：
+
+- `app/Ui/Icon.py`
+- `app/Ui/contact/contactInfoUi.py` + `.ui`
+- `app/ui_pc/contact/contactInfoUi.py` + `.ui`
+- `app/Ui/decrypt/decrypt.py`
+- `app/ImageBox/ui.py`
+- `app/DataBase/data.py`
+- `app/person.py`
+
+拉取最新代码或重新执行本文件即可。
+
+### Q5. `person.py: SyntaxWarning: invalid escape sequence '\P'`
+
+**原因**：硬编码的 Windows 路径字符串中包含 `\P`、`\W` 被 Python 当成转义序列。
+
+**解决**：已将 `app/person.py` 中两处硬编码路径统一改为通过 `Icon.Default_avatar_path` 获取，不再包含转义字符。
+
+### Q6. 解密进度条跑到一半失败
+
+可能的原因：
+
+1. 微信正在运行且数据库文件被占用 → 先退出微信。
+2. MSG.db 文件损坏 → 尝试让微信重新同步消息（切换会话、重启微信）。
+3. 版本不匹配 → 再次确认你的微信版本。
+
+### Q7. 解密成功后打开主界面空白
+
+- 检查 `app/DataBase/Msg/` 下是否有 `MSG.db` 等文件（大小应大于 0）。
+- 用任意 SQLite 工具（如 DB Browser for SQLite）打开 `MSG.db`，看是否能正常浏览表结构。
+- 如果数据库为空/表异常，解密密钥不正确 → 重新检查微信版本与偏移量。
+
+### Q8. 想换个账号 / 清除本地数据
+
+直接删除以下目录（由解密工具生成）：
+
+```
+app/DataBase/Msg/
+app/data/info.json
+```
+
+然后重新执行 `python decrypt_window.py`。
+
+---
+
+## 7. 已修复的问题清单
+
+本 fork 在原项目基础上修复了以下问题：
+
+| # | 问题 | 修复位置 |
+|---|---|---|
+| 1 | 图标路径 `app/data/icons/` 不存在，Qt 报 SVG 加载失败 | `app/Ui/Icon.py` 及 8 个引用文件 |
+| 2 | `ModuleNotFoundError: No module named 'xmltodict'` | `requirements.txt` 中补充 |
+| 3 | `ModuleNotFoundError: No module named 'docx'` | `requirements.txt` 中补充 `python-docx` |
+| 4 | `get_wx_info.py` 顶部使用 `sys/os/winreg` 但在底部才 import | 把 import 移到文件顶部 |
+| 5 | 微信进程名为 `Weixin.exe` 时提示 "No Run" | `read_info()` 同时识别 `WeChat.exe` 与 `Weixin.exe` |
+| 6 | 获取信息失败后后续代码仍执行，抛 `string indices must be integers` | `pc_decrypt.py` 中对 result 做类型检查，失败时弹框并 return |
+| 7 | `app/person.py` 中有硬编码 Windows 绝对路径，导致 `SyntaxWarning` 与路径错误 | 统一改为使用 `Icon.Default_avatar_path` |
+| 8 | `requirements.txt` 锁定 `numpy 1.24.1`、`pandas 1.5.2` 等无法在 Python 3.13 下编译 | 放宽到 `numpy>=1.26`、`pandas>=2.0`、`PyQt5>=5.15` 等 |
+
+---
+
+## 8. 目录结构
+
+```
+fork-WeChatMsg/
+├── main.py                    # 主程序（解密 + 聊天/分析）
+├── decrypt_window.py          # 独立解密工具
+├── requirements.txt           # Python 依赖
+├── USAGE.md                   # 本文档
+├── readme.md                  # 项目简介
+└── app/
+    ├── Ui/                    # 原 GUI（聊天、联系人、解密、分析）
+    │   ├── Icon.py            # 图标路径集中管理
+    │   ├── decrypt/
+    │   ├── contact/
+    │   └── chat/
+    ├── ui_pc/                 # PC 版专用 GUI（pc_decrypt 等）
+    ├── DataBase/              # 数据库读写与合并
+    │   ├── Msg/               # ← 解密后 .db 生成在这里
+    │   ├── data.py
+    │   ├── micro_msg.py
+    │   └── merge.py
+    ├── decrypt/               # 核心解密 & 微信信息读取
+    │   ├── decrypt.py
+    │   ├── get_wx_info.py     # ← 从内存读取偏移量
+    │   └── version_list.json  # ← 版本偏移量配置
+    ├── resources/             # 图标与资源（qrc / svg / logo）
+    ├── ImageBox/              # 图片预览组件
+    ├── components/            # 公共组件（气泡、头像等）
+    └── util/                  # 工具函数（路径、搜索等）
+```
+
+---
+
+## 9. 免责声明
+
+本项目仅用于**个人学习研究**，以及备份本人的聊天记录。使用本项目访问他人的微信数据或用于商业用途均违反相关法律法规，**一切后果由使用者自行承担**。
+
+微信及其数据库是腾讯公司的产品，本项目与腾讯无关。请在法律允许的范围内使用。
+
+---
+
+## 10. 反馈与贡献
+
+如在使用中发现其他问题，可在 issues 中反馈。若你能为新版微信（4.x）提供偏移量，欢迎提交 PR 更新 `version_list.json`。

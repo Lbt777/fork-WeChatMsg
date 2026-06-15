@@ -53,32 +53,38 @@ class DecryptControl(QWidget, decryptUi.Ui_Dialog):
                 return
             result = get_wx_info.get_info(VERSION_LIST)
             print(result)
-            if result == -1:
-                QMessageBox.critical(self, "错误", "请登录微信")
-            elif result == -2:
-                QMessageBox.critical(self, "错误", "微信版本不匹配\n请更新微信版本为:3.9.8.15")
-            elif result == -3:
-                QMessageBox.critical(self, "错误", "WeChat WeChatWin.dll Not Found")
-            else:
+            if isinstance(result, str):
+                if "No Run" in result:
+                    QMessageBox.critical(self, "错误", "请先登录并启动微信")
+                elif "Not Supported" in result or "Current Version" in result:
+                    QMessageBox.critical(self, "错误", f"微信版本不匹配\n{result}")
+                elif "Not Found" in result:
+                    QMessageBox.critical(self, "错误", result)
+                else:
+                    QMessageBox.critical(self, "错误", result)
+                return
+            elif not result:
+                QMessageBox.critical(self, "错误", "未读取到微信信息")
+                return
+            self.ready = True
+            self.info = result[0]
+            self.label_key.setText(self.info['key'])
+            self.lineEdit.setText(self.info['wxid'])
+            self.label_name.setText(self.info['name'])
+            self.label_phone.setText(self.info['mobile'])
+            self.label_pid.setText(str(self.info['pid']))
+            self.label_version.setText(self.info['version'])
+            self.lineEdit.setFocus()
+            self.checkBox.setChecked(True)
+            self.get_wxidSignal.emit(self.info['wxid'])
+            directory = os.path.join(path.wx_path(), self.info['wxid'])
+            if os.path.exists(directory):
+                self.label_db_dir.setText(directory)
+                self.wx_dir = directory
+                self.checkBox_2.setChecked(True)
                 self.ready = True
-                self.info = result[0]
-                self.label_key.setText(self.info['key'])
-                self.lineEdit.setText(self.info['wxid'])
-                self.label_name.setText(self.info['name'])
-                self.label_phone.setText(self.info['mobile'])
-                self.label_pid.setText(str(self.info['pid']))
-                self.label_version.setText(self.info['version'])
-                self.lineEdit.setFocus()
-                self.checkBox.setChecked(True)
-                self.get_wxidSignal.emit(self.info['wxid'])
-                directory = os.path.join(path.wx_path(), self.info['wxid'])
-                if os.path.exists(directory):
-                    self.label_db_dir.setText(directory)
-                    self.wx_dir = directory
-                    self.checkBox_2.setChecked(True)
-                    self.ready = True
-                if self.ready:
-                    self.label_ready.setText('已就绪')
+            if self.ready:
+                self.label_ready.setText('已就绪')
                 if self.wx_dir and os.path.exists(os.path.join(self.wx_dir)):
                     self.label_ready.setText('已就绪')
         except Exception as e:

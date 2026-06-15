@@ -220,7 +220,7 @@ def avatar_md5(wxid):
 
 def get_avator(wxid):
     if wxid == None:
-        return os.path.join(root_path, '/app/data/icons/default_avatar.svg')
+        return os.path.join(root_path, 'app/resources/icons/default_avatar.svg')
     wxid = str(wxid)
     avatar = avatar_md5(wxid)
     path = os.path.join(root_path, 'app', 'data', 'avatar', avatar[:2], avatar[2:4])

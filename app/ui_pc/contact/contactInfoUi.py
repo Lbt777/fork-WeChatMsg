@@ -57,7 +57,7 @@ class Ui_Form(object):
         self.horizontalLayout_3.addWidget(self.btn_back)
         self.toolButton_output = QtWidgets.QToolButton(self.frame)
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("../../data/icons/output.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap("../../resources/icons/output.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.toolButton_output.setIcon(icon)
         self.toolButton_output.setCheckable(False)
         self.toolButton_output.setPopupMode(QtWidgets.QToolButton.MenuButtonPopup)

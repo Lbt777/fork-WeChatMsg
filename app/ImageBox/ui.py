@@ -97,7 +97,7 @@ class MainDemo(QWidget):
 
         self.setWindowTitle("Image Viewer")
         self.setFixedSize(1000, 600)
-        self.setWindowIcon(QIcon('./app/data/icons/logo.svg'))
+        self.setWindowIcon(QIcon('./app/resources/icons/logo.svg'))
         self.zoom_in = QPushButton("")
         self.zoom_in.clicked.connect(self.large_click)
         self.zoom_in.setFixedSize(30, 30)

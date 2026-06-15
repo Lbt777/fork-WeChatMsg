@@ -27,7 +27,7 @@ class DecryptControl(QWidget, decryptUi.Ui_Dialog):
         super(DecryptControl, self).__init__(parent)
         self.setupUi(self)
         self.setWindowTitle('解密')
-        self.setWindowIcon(QIcon('./app/data/icons/logo.svg'))
+        self.setWindowIcon(QIcon('./app/resources/icons/logo.svg'))
         self.btn_db.clicked.connect(self.get_db)
         self.btn_xml.clicked.connect(self.get_xml)
         self.pushButton_3.clicked.connect(self.decrypt)
